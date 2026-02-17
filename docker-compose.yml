@@ -4,6 +4,8 @@ services:
     image: postgres:16-alpine
     container_name: url_shortener_db
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -25,12 +27,14 @@ services:
       target: production
     container_name: url_shortener_backend
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      FRONTEND_URL: http://localhost:3000
-      PORT: 3001
+      FRONTEND_URL: ${FRONTEND_URL}
+      PORT: ${PORT}
     ports:
-      - "3001:3001"
+      - "${PORT}:${PORT}"
     depends_on:
       postgres:
         condition: service_healthy
@@ -42,8 +46,10 @@ services:
       target: production
     container_name: url_shortener_frontend
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3001
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     ports:
       - "3000:3000"
     depends_on:
