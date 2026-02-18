@@ -13,7 +13,7 @@ export class UrlService {
     return {
       id: url.id,
       original: url.original,
-      shortUrl: `${process.env.FRONTEND_URL}/${url.id}`,
+      shortUrl: `http://localhost:${process.env.PORT || 3001}/${url.id}`,
       clicks: url.clicks,
       createdAt: url.createdAt,
     };
@@ -27,7 +27,7 @@ export class UrlService {
     return urls.map((url) => ({
       id: url.id,
       original: url.original,
-      shortUrl: `${process.env.FRONTEND_URL}/${url.id}`,
+      shortUrl: `http://localhost:${process.env.PORT || 3001}/${url.id}`,
       clicks: url.clicks,
       createdAt: url.createdAt,
     }));
