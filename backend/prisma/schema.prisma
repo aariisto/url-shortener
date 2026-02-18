@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -12,7 +13,6 @@ datasource db {
 
 model Url {
   id        String   @id @default(cuid())
-  slug      String   @unique
   original  String
   clicks    Int      @default(0)
   createdAt DateTime @default(now())

@@ -6,18 +6,21 @@ import {
   Body,
   Res,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
-import { Response } from 'express';
+import type { Response } from 'express';
 import { UrlService } from '../services/url.service';
-import { CreateUrlDto } from '../models/create-url.dto';
 
 @Controller()
 export class UrlController {
   constructor(private readonly urlService: UrlService) {}
 
   @Post('url')
-  async create(@Body() dto: CreateUrlDto) {
-    return this.urlService.create(dto);
+  async create(@Body() body: { original: string }) {
+    if (!body.original) {
+      throw new BadRequestException('URL is required');
+    }
+    return this.urlService.create(body.original);
   }
 
   @Get('url')
@@ -25,9 +28,9 @@ export class UrlController {
     return this.urlService.findAll();
   }
 
-  @Get(':slug')
-  async redirect(@Param('slug') slug: string, @Res() res: Response) {
-    const url = await this.urlService.findBySlug(slug);
-    return res.redirect(HttpStatus.FOUND, url.original);
+  @Get(':id')
+  async redirect(@Param('id') id: string, @Res() res: Response) {
+    const original = await this.urlService.findById(id);
+    return res.redirect(HttpStatus.FOUND, original);
   }
 }

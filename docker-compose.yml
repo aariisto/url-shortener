@@ -30,7 +30,7 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       FRONTEND_URL: ${FRONTEND_URL}
       PORT: ${PORT}
     ports:
@@ -44,12 +44,13 @@ services:
     build:
       context: ./frontend
       target: production
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     container_name: url_shortener_frontend
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
       PORT: 3000
       HOSTNAME: "0.0.0.0"
     ports:
