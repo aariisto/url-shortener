@@ -27,4 +27,5 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 3001
 
-CMD ["node", "dist/main.js"]
+# À la place de npx prisma migrate deploy
+CMD ["sh", "-c", "npx prisma db push --skip-generate && node dist/main.js"]
